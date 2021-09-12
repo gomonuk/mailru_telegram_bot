@@ -46,10 +46,10 @@ jobs:
       run: docker login -u gomonuk -p ${{ secrets.DOCKERHUB_TOKEN }} && docker build .  --tag gomonuk/calcbot:latest && docker push gomonuk/calcbot:latest
   
   deploy:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
       run: docker login -u gomonuk -p ${{ secrets.HEROKU_TOKEN }} registry.heroku.com && docker build . --tag registry.heroku.com/mailrutg-from-docker/web && docker push registry.heroku.com/mailrutg-from-docker/web
+    - run: WEB_DOCKER_IMAGE_ID=$(docker inspect registry.heroku.com/mailrutg-from-docker/web --format="{{.Id}}")
+    - run: echo $WEB_DOCKER_IMAGE_ID
