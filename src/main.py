@@ -1,10 +1,12 @@
+import os
+
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 
 from helpers import check, calc
 
-TOKEN = "1970454158:AAGPh2dEwz1Z18p6EoPDQnyZlGRwTN1l5l8"
+TOKEN = os.environ.get("TG_BOT_TOKEN")
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
 
