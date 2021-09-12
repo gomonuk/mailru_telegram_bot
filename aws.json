@@ -1,0 +1,13 @@
+{
+ "AWSEBDockerrunVersion": "2",
+ "Image": {
+   "Name": "gomonuk/ppp",
+   "Update": "true"
+ },
+"Ports": [
+ {
+   "ContainerPort": 5000,
+   "HostPort": 8000
+ }
+]
+}
