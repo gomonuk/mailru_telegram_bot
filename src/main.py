@@ -1,4 +1,5 @@
 import os
+import subprocess
 
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
@@ -26,4 +27,5 @@ async def get_text_messages(msg: types.Message):
 
 
 if __name__ == "__main__":
+    subprocess.run(["python", "server.py"])
     executor.start_polling(dp)
