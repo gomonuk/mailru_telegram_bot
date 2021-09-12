@@ -11,7 +11,7 @@ dp = Dispatcher(bot)
 
 @dp.message_handler(commands=["start", "help"])
 async def send_welcome(msg: types.Message):
-    await msg.reply(f"Приятно познакомиться,{msg.from_user.first_name}")
+    await msg.reply(f"Приятно ,{msg.from_user.first_name}")
 
 
 @dp.message_handler(content_types=["text"])
