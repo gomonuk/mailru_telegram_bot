@@ -4,3 +4,6 @@ def check(in_str: str) -> bool:
 
 def calc(string: str) -> int:
     return eval(string)
+
+def bla():
+    return True
