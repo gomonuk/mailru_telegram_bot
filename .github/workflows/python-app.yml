@@ -1,7 +1,7 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
-name: Python application
+name: Workflow
 
 on:
   push:
@@ -15,25 +15,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install poetry flake8 pytest
-        poetry install
-    - name: Lint with flake8
-      run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 src --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 src --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Test with pytest
-      run: |
-        pytest src
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry flake8 pytest
+          poetry install
+      - name: Lint with flake8
+        run: |
+          # stop the build if there are Python syntax errors or undefined names
+          flake8 src --count --select=E9,F63,F7,F82 --show-source --statistics
+          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+          flake8 src --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      - name: Test with pytest
+        run: |
+          pytest src
 
 
   publish:
@@ -41,23 +41,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Build the Docker image
-      run: docker login -u gomonuk -p ${{ secrets.DOCKERHUB_TOKEN }} && docker build .  --tag gomonuk/calcbot:latest && docker push gomonuk/calcbot:latest
-  
+      - uses: actions/checkout@v2
+      - name: Build the Docker image
+        run: |
+          docker login -u gomonuk -p ${{ secrets.DOCKERHUB_TOKEN }} && \
+          docker build .  --tag gomonuk/calcbot:latest && \
+          docker push gomonuk/calcbot:latest
+
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Build the Docker image
-      run: |
-        docker login -u gomonuk -p ${{ secrets.HEROKU_TOKEN }} registry.heroku.com && \
-        docker build . --tag registry.heroku.com/mailrutg-from-docker/web && \
-        docker push registry.heroku.com/mailrutg-from-docker/web
-        WEB_DOCKER_IMAGE_ID=$(docker inspect registry.heroku.com/mailrutg-from-docker/web --format="{{.Id}}")
-        JSON_FMT=`printf '{"updates":[{"type": "web", "docker_image": "%s" }]}' "$WEB_DOCKER_IMAGE_ID"`
-        curl -u 'dan.gomonuk@gmail.com:bc26ba54-a4e5-4592-b409-e788874f9496' \
-          -X PATCH 'https://api.heroku.com/apps/mailrutg-from-docker/formation' \
-          -H "Content-Type: application/json" \
-          -H "Accept: application/vnd.heroku+json; version=3.docker-releases" \
-          -d "$JSON_FMT"
+      - uses: actions/checkout@v2
+      - name: Build the Docker image
+        run: |
+          docker login -u _ -p ${{ secrets.HEROKU_TOKEN }} registry.heroku.com
+          docker build . --tag registry.heroku.com/mailrutg-from-docker/web
+          docker push registry.heroku.com/mailrutg-from-docker/web
+          WEB_DOCKER_IMAGE_ID=$(docker inspect registry.heroku.com/mailrutg-from-docker/web --format="{{.Id}}")
+          JSON=`printf '{"updates":[{"type": "web", "docker_image": "%s" }]}' "$WEB_DOCKER_IMAGE_ID"`
+          curl -u 'dan.gomonuk@gmail.com:bc26ba54-a4e5-4592-b409-e788874f9496' \
+            -X PATCH 'https://api.heroku.com/apps/mailrutg-from-docker/formation' \
+            -H "Content-Type: application/json" \
+            -H "Accept: application/vnd.heroku+json; version=3.docker-releases" \
+            -d "$JSON"
