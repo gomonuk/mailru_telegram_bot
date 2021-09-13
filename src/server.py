@@ -10,7 +10,13 @@ class HttpGetHandler(BaseHTTPRequestHandler):
         self.wfile.write("<html><body>Был получен GET-запрос.</body></html>".encode())
 
 
-server_address = ("localhost", os.environ.get("PORT"))
+try:
+    port = int(os.environ.get("PORT"))
+except Exception as e:
+    print(e)
+    port = 80
+
+server_address = ("localhost", port)
 
 httpd = HTTPServer(server_address, HttpGetHandler)
 
