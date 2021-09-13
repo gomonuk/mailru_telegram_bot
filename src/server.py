@@ -7,7 +7,7 @@ class HttpGetHandler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
-        self.wfile.write("<html><body>Был получен GET-запрос.</body></html>".encode())
+        self.wfile.write("<html><body>Hello</body></html>".encode())
 
 
 server_address = ("0.0.0.0", int(os.environ.get("PORT", 5000)))

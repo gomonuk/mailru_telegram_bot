@@ -27,5 +27,5 @@ async def get_text_messages(msg: types.Message):
 
 
 if __name__ == "__main__":
-    subprocess.run(["python", "server.py"])
+    subprocess.Popen(["python", "server.py"])
     executor.start_polling(dp)
