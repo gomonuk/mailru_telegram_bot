@@ -1,6 +1,8 @@
 import os
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
+# Сервер нужен чтобы бот не засыпал на бесплатном тарифе хироку
+
 
 class HttpGetHandler(BaseHTTPRequestHandler):
     def do_GET(self):
