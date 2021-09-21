@@ -4,8 +4,11 @@ import subprocess
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher, filters
 from aiogram.utils import executor
+from dotenv import load_dotenv
 
 import reverse_polish_notation as rpn
+
+load_dotenv()
 
 TOKEN = os.environ.get("TG_BOT_TOKEN")
 bot = Bot(token=TOKEN)
