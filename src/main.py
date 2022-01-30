@@ -84,5 +84,5 @@ async def calc_handler(msg: types.Message):
 
 
 if __name__ == "__main__":
-    subprocess.Popen(["python", "server.py"])
+    # subprocess.Popen(["python", "server.py"])
     executor.start_polling(dp)
